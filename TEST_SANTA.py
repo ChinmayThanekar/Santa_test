@@ -37,39 +37,11 @@ for i in range(25):
         unsafe_allow_html=True
     )
 
-# ---- GUARANTEED AUDIO (Streamlit-safe method) ----
-# Uses iframe HTML component – this is the ONLY reliable way in Streamlit
-components.html(
-    """
-    <audio id="bg" autoplay loop muted>
-      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
 
-    <script>
-      const audio = document.getElementById('bg');
-
-      // Try autoplay muted
-      audio.play().catch(() => {});
-
-      // Unmute on first user interaction
-      const enable = () => {
-        audio.muted = false;
-        audio.play();
-        document.removeEventListener('click', enable);
-        document.removeEventListener('keydown', enable);
-      };
-
-      document.addEventListener('click', enable);
-      document.addEventListener('keydown', enable);
-    </script>
-    """,
-    height=0,
-)
 
 st.title("🎁 Secret Santa 🎁")
 st.subheader("Answer this to unlock your festive spirit 🎄")
 
-st.info("🔊 Tap anywhere once to enable festive sound (browser requirement)")
 
 question = "What gift would make you smile this Christmas?"
 st.write(f"🎅 **Question:** {question}")
@@ -90,4 +62,4 @@ if st.button("Reveal Magic ✨") and answer:
     st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")
     time.sleep(1)
 
-st.caption("🎶 Snow falling, Santa listening...")
+st.caption("❄️ Snow falling, Santa is watching...")

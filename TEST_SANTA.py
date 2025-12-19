@@ -39,11 +39,14 @@ for i in range(25):
 st.title("🎁 Secret Santa 🎁")
 st.subheader("Answer this to unlock your festive spirit 🎄")
 
-# ---- Background Music ----
-st.audio(
-    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    format="audio/mp3",
-    start_time=0
+# ---- Background Music (Hidden & Autoplay) ----
+st.markdown(
+    """
+    <audio autoplay loop hidden>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    """,
+    unsafe_allow_html=True
 )
 
 question = "What gift would make you smile this Christmas?"

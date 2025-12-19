@@ -73,10 +73,14 @@ for i in range(25):
         unsafe_allow_html=True
     )
 
-# ---- Ensure log directory inside git repo ----
-LOG_DIR = "logs"
+# ---- Ensure log directory inside git repo (absolute path) ----
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_DIR = os.path.join(BASE_DIR, "logs")
 LOG_FILE = os.path.join(LOG_DIR, "secret_santa.log")
 os.makedirs(LOG_DIR, exist_ok=True)
+
+# ---- DEBUG (optional): show where logs are written ----
+# st.write("Logs will be written to:", LOG_FILE)
 
 # ================= START PAGE =================
 if not st.session_state.started:

@@ -32,26 +32,6 @@ st.markdown(
         100% { transform: translateY(110vh); }
     }
 
-    /* Start button */
-    .start-btn {
-        width: 320px;
-        height: 320px;
-        border-radius: 50%;
-        background: radial-gradient(circle, #ffd633, #ff9900);
-        color: #333;
-        font-size: 28px;
-        font-weight: bold;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        animation: pulse 1.8s infinite;
-    }
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
     /* Box opening animation */
     .gift-box {
         width: 300px;
@@ -93,6 +73,11 @@ for i in range(25):
         unsafe_allow_html=True
     )
 
+# ---- Ensure log directory inside git repo ----
+LOG_DIR = "logs"
+LOG_FILE = os.path.join(LOG_DIR, "secret_santa.log")
+os.makedirs(LOG_DIR, exist_ok=True)
+
 # ================= START PAGE =================
 if not st.session_state.started:
     st.markdown("<h1 style='text-align:center;'>🎄 Welcome to Secret Santa 🎄</h1>", unsafe_allow_html=True)
@@ -105,12 +90,7 @@ if not st.session_state.started:
             st.rerun()
 
 # ================= MAIN PAGE =================
-# ---- Ensure log directory inside git repo ----
-LOG_DIR = "logs"
-LOG_FILE = os.path.join(LOG_DIR, "secret_santa.log")
-os.makedirs(LOG_DIR, exist_ok=True)
-
-else:
+if st.session_state.started:
     # Gift box opening animation
     st.markdown("<div class='gift-box'></div>", unsafe_allow_html=True)
     time.sleep(1)

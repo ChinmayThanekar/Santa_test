@@ -57,11 +57,14 @@ if st.button("Reveal Magic ✨") and answer:
     # ---- LOG FORMAT ----
     log_message = (
         f"[{timestamp}] | EVENT=SECRET_SANTA_RESPONSE | "
-        f"QUESTION=\"{question}\" | ANSWER=\"{answer}\""
+        f"QUESTION=\"{question}\" | ANSWER=\"{answer}\"\n"
     )
 
-    st.success("Ho Ho Ho! 🎅 Your Secret Santa is taking notes!")
-    st.code(log_message, language="log")
+    # ---- WRITE LOG TO LOCAL FILE (NOT DISPLAYED) ----
+    with open("secret_santa.log", "a", encoding="utf-8") as f:
+        f.write(log_message)
+
+    st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")
 
     # Optional delay for effect
     time.sleep(1)

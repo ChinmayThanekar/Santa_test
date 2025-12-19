@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 from datetime import datetime
+import streamlit.components.v1 as components
 
 st.set_page_config(page_title="🎅 Secret Santa 🎄", layout="centered")
 
@@ -24,22 +25,6 @@ st.markdown(
         0% { transform: translateY(0); }
         100% { transform: translateY(110vh); }
     }
-
-    /* Floating sound button */
-    #sound-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: #ffd633;
-        color: #333;
-        border: none;
-        border-radius: 30px;
-        padding: 12px 18px;
-        font-weight: bold;
-        cursor: pointer;
-        z-index: 10000;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    }
     </style>
     """,
     unsafe_allow_html=True
@@ -52,55 +37,39 @@ for i in range(25):
         unsafe_allow_html=True
     )
 
-# ---- Guaranteed Autoplay Music with Enhancements ----
-st.markdown(
+# ---- GUARANTEED AUDIO (Streamlit-safe method) ----
+# Uses iframe HTML component – this is the ONLY reliable way in Streamlit
+components.html(
     """
-    <audio id="bg-music" loop hidden>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <audio id="bg" autoplay loop muted>
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="sound-btn">🔊 Enable Sound</button>
-
     <script>
-        const audio = document.getElementById('bg-music');
-        const btn = document.getElementById('sound-btn');
+      const audio = document.getElementById('bg');
 
-        // Restore preference
-        const savedPref = localStorage.getItem('santa_sound');
-        if (savedPref === 'on') {
-            audio.volume = 0;
-            audio.play().then(() => fadeIn());
-            btn.style.display = 'none';
-        }
+      // Try autoplay muted
+      audio.play().catch(() => {});
 
-        function fadeIn() {
-            let vol = 0;
-            audio.volume = vol;
-            const fade = setInterval(() => {
-                if (vol < 1) {
-                    vol += 0.05;
-                    audio.volume = Math.min(vol, 1);
-                } else {
-                    clearInterval(fade);
-                }
-            }, 120);
-        }
+      // Unmute on first user interaction
+      const enable = () => {
+        audio.muted = false;
+        audio.play();
+        document.removeEventListener('click', enable);
+        document.removeEventListener('keydown', enable);
+      };
 
-        btn.addEventListener('click', () => {
-            audio.volume = 0;
-            audio.play().then(() => {
-                fadeIn();
-                localStorage.setItem('santa_sound', 'on');
-                btn.style.display = 'none';
-            });
-        });
+      document.addEventListener('click', enable);
+      document.addEventListener('keydown', enable);
     </script>
     """,
-    unsafe_allow_html=True
+    height=0,
 )
 
 st.title("🎁 Secret Santa 🎁")
 st.subheader("Answer this to unlock your festive spirit 🎄")
+
+st.info("🔊 Tap anywhere once to enable festive sound (browser requirement)")
 
 question = "What gift would make you smile this Christmas?"
 st.write(f"🎅 **Question:** {question}")
@@ -121,4 +90,4 @@ if st.button("Reveal Magic ✨") and answer:
     st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")
     time.sleep(1)
 
-st.caption("🎶 Snow falling, music fading in, Santa is listening...")
+st.caption("🎶 Snow falling, Santa listening...")

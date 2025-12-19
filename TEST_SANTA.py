@@ -29,11 +29,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.audio(
-    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    format="audio/mp3",
-    start_time=0
-)
+
 # ---- Snowflakes ----
 for i in range(25):
     st.markdown(
@@ -95,4 +91,5 @@ if st.button("Reveal Magic ✨") and answer:
     time.sleep(1)
 
 st.caption("🎶 Snow falling, Santa listening...")
+
 

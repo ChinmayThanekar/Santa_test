@@ -39,12 +39,24 @@ for i in range(25):
 st.title("🎁 Secret Santa 🎁")
 st.subheader("Answer this to unlock your festive spirit 🎄")
 
-# ---- Background Music (Hidden & Autoplay) ----
+# ---- Background Music (Guaranteed Autoplay: muted → unmute on interaction) ----
 st.markdown(
     """
-    <audio autoplay loop hidden>
+    <audio id="bg-music" autoplay loop muted hidden>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
+
+    <script>
+        const audio = document.getElementById('bg-music');
+        const enableSound = () => {
+            audio.muted = false;
+            audio.play();
+            document.removeEventListener('click', enableSound);
+            document.removeEventListener('keydown', enableSound);
+        };
+        document.addEventListener('click', enableSound);
+        document.addEventListener('keydown', enableSound);
+    </script>
     """,
     unsafe_allow_html=True
 )

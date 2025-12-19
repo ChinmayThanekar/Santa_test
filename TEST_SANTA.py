@@ -77,7 +77,7 @@ for i in range(25):
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 #LOG_DIR = os.path.join(BASE_DIR, "logs")
 LOG_FILE = os.path.join(BASE_DIR, "secret_santa.log")
-os.makedirs(LOG_DIR, exist_ok=True)
+os.makedirs(BASE_DIR, exist_ok=True)
 
 # ---- ENSURE LOG FILE EXISTS (touch file) ----
 if not os.path.exists(LOG_FILE):
@@ -128,4 +128,5 @@ if st.session_state.started:
         time.sleep(1)
 
     st.caption("❄️ Snow falling, Santa is watching...")
+
 

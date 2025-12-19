@@ -91,5 +91,3 @@ if st.button("Reveal Magic ✨") and answer:
     time.sleep(1)
 
 st.caption("🎶 Snow falling, Santa listening...")
-
-

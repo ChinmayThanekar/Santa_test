@@ -9,10 +9,8 @@ st.set_page_config(page_title="🎅 Secret Santa 🎄", layout="centered")
 # ---- SESSION STATE ----
 if "started" not in st.session_state:
     st.session_state.started = False
-if "show_animation" not in st.session_state:
-    st.session_state.show_animation = False
 
-# ---- GLOBAL CSS (background + snow) ----
+# ---- GLOBAL CSS ----
 st.markdown(
     """
     <style>
@@ -54,20 +52,8 @@ if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w", encoding="utf-8"):
         pass
 
-# ================= START PAGE =================
-'''if not st.session_state.started:
-    st.markdown("<h1 style='text-align:center;'>🎄 Welcome to Secret Santa 🎄</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align:center; font-size:20px;'>Press the magic button to begin</p>", unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("🎁 START 🎁"):
-            st.session_state.started = True
-            st.session_state.show_animation = True
-            st.rerun()'''
-
-# ================= OPEN BOX ANIMATION =================
-if st.session_state.show_animation:
+# ================= ANIMATION = START PAGE =================
+if not st.session_state.started:
     components.html(
         """
 <!DOCTYPE html>
@@ -81,7 +67,7 @@ if st.session_state.show_animation:
 
     class GiftBoxController extends Controller {
       static targets = ["emoji", "claimBtn", "message"];
-      START() {
+      claim() {
         this.emojiTarget.classList.remove("joggle");
         void this.emojiTarget.offsetWidth;
         this.emojiTarget.classList.add("gift-box__emoji--claimed");
@@ -90,7 +76,8 @@ if st.session_state.show_animation:
           this.messageTarget.classList.remove("gift-box__message--hidden");
           this.emojiTarget.hidden = true;
           confetti({ particleCount: 200, spread: 100, origin: { y: 0.25 } });
-        }, 500);
+          window.parent.postMessage("START_APP", "*");
+        }, 800);
       }
     }
     application.register("gift-box", GiftBoxController);
@@ -98,10 +85,10 @@ if st.session_state.show_animation:
 
   <style>
     body { font-family: Lucida Grande; background: transparent; }
-    .text-center { text-align: center; }
+    .text-center { text-align: center; margin-top: 3em; }
     .joggle { animation: joggle 4.5s ease-in-out infinite; }
-    .gift-box__emoji { font-size: 8em; }
-    .gift-box__btn { font-size: 2em; }
+    .gift-box__emoji { font-size: 9em; }
+    .gift-box__btn { font-size: 2em; margin-top: 1em; }
     .gift-box__emoji--claimed { transition: transform 500ms ease; transform: scale(1.5) rotate(12deg); }
     .gift-box__message { margin-top: 2em; font-size: 2em; transition: all 500ms ease; }
     .gift-box__message--hidden { opacity: 0; transform: scale(0.95); }
@@ -117,26 +104,39 @@ if st.session_state.show_animation:
 </head>
 <body>
   <div class="text-center" data-controller="gift-box">
-    <h2>Claim your gift</h2>
+    <h2>🎄 Claim your gift 🎄</h2>
     <div class="gift-box__emoji joggle" data-gift-box-target="emoji">🎁</div>
     <div>
       <button class="gift-box__btn" data-action="gift-box#claim" data-gift-box-target="claimBtn">Claim</button>
     </div>
-    <div class="gift-box__message gift-box__message--hidden" data-gift-box-target="message">🎉 Gift claimed 🎉</div>
+    <div class="gift-box__message gift-box__message--hidden" data-gift-box-target="message">✨ Let the magic begin ✨</div>
   </div>
 </body>
 </html>
         """,
-        height=420,
+        height=450,
     )
 
-    # Auto-move forward after animation time
-    time.sleep(3)
-    st.session_state.show_animation = False
-    st.rerun()
+    # listen for iframe message
+    st.markdown(
+        """
+        <script>
+        window.addEventListener("message", (event) => {
+            if (event.data === "START_APP") {
+                fetch("/?start=true");
+            }
+        });
+        </script>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if st.query_params.get("start"):
+        st.session_state.started = True
+        st.rerun()
 
 # ================= MAIN PAGE =================
-if st.session_state.started and not st.session_state.show_animation:
+if st.session_state.started:
     st.title("🎁 Secret Santa 🎁")
     st.subheader("Answer this to unlock your festive spirit 🎄")
 
@@ -156,4 +156,3 @@ if st.session_state.started and not st.session_state.show_animation:
         st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")
 
     st.caption("❄️ Snow falling, Santa is watching...")
-

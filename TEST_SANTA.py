@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import os
 from datetime import datetime
 
 st.set_page_config(page_title="🎅 Secret Santa 🎄", layout="centered")
@@ -104,6 +105,11 @@ if not st.session_state.started:
             st.rerun()
 
 # ================= MAIN PAGE =================
+# ---- Ensure log directory inside git repo ----
+LOG_DIR = "logs"
+LOG_FILE = os.path.join(LOG_DIR, "secret_santa.log")
+os.makedirs(LOG_DIR, exist_ok=True)
+
 else:
     # Gift box opening animation
     st.markdown("<div class='gift-box'></div>", unsafe_allow_html=True)
@@ -125,7 +131,7 @@ else:
             f"QUESTION=\"{question}\" | ANSWER=\"{answer}\"\n"
         )
 
-        with open("secret_santa.log", "a", encoding="utf-8") as f:
+        with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(log_message)
 
         st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")

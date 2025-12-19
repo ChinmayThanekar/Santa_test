@@ -55,7 +55,7 @@ if not os.path.exists(LOG_FILE):
         pass
 
 # ================= START PAGE =================
-if not st.session_state.started:
+'''if not st.session_state.started:
     st.markdown("<h1 style='text-align:center;'>🎄 Welcome to Secret Santa 🎄</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align:center; font-size:20px;'>Press the magic button to begin</p>", unsafe_allow_html=True)
 
@@ -64,7 +64,7 @@ if not st.session_state.started:
         if st.button("🎁 START 🎁"):
             st.session_state.started = True
             st.session_state.show_animation = True
-            st.rerun()
+            st.rerun()'''
 
 # ================= OPEN BOX ANIMATION =================
 if st.session_state.show_animation:
@@ -81,7 +81,7 @@ if st.session_state.show_animation:
 
     class GiftBoxController extends Controller {
       static targets = ["emoji", "claimBtn", "message"];
-      claim() {
+      START() {
         this.emojiTarget.classList.remove("joggle");
         void this.emojiTarget.offsetWidth;
         this.emojiTarget.classList.add("gift-box__emoji--claimed");
@@ -156,3 +156,4 @@ if st.session_state.started and not st.session_state.show_animation:
         st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")
 
     st.caption("❄️ Snow falling, Santa is watching...")
+

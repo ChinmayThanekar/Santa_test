@@ -75,8 +75,8 @@ for i in range(25):
 
 # ---- Ensure log directory inside git repo (absolute path) ----
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_DIR = os.path.join(BASE_DIR, "logs")
-LOG_FILE = os.path.join(LOG_DIR, "secret_santa.log")
+#LOG_DIR = os.path.join(BASE_DIR, "logs")
+LOG_FILE = os.path.join(BASE_DIR, "secret_santa.log")
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # ---- ENSURE LOG FILE EXISTS (touch file) ----
@@ -128,3 +128,4 @@ if st.session_state.started:
         time.sleep(1)
 
     st.caption("❄️ Snow falling, Santa is watching...")
+

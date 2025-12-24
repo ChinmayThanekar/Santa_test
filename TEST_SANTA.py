@@ -121,7 +121,7 @@ if not st.session_state.started:
     st.markdown("<h3 style='text-align:center;'>⏳ Preparing your surprise...</h3>", unsafe_allow_html=True)
     time.sleep(2)
     st.session_state.started = True
-    st.experimental_rerun()
+    st.rerun()
 
 # ================= MAIN PAGE =================
 if st.session_state.started:

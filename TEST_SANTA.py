@@ -9,6 +9,8 @@ st.set_page_config(page_title="🎅 Secret Santa 🎄", layout="centered")
 # ---- SESSION STATE ----
 if "started" not in st.session_state:
     st.session_state.started = False
+if "claimed" not in st.session_state:
+    st.session_state.claimed = False
 
 # ---- GLOBAL CSS ----
 st.markdown(
@@ -52,7 +54,7 @@ if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w", encoding="utf-8"):
         pass
 
-# ================= ANIMATION = START PAGE =================
+# ================= ANIMATION (ENTRY PAGE) =================
 if not st.session_state.started:
     components.html(
         """
@@ -76,8 +78,7 @@ if not st.session_state.started:
           this.messageTarget.classList.remove("gift-box__message--hidden");
           this.emojiTarget.hidden = true;
           confetti({ particleCount: 200, spread: 100, origin: { y: 0.25 } });
-          window.parent.postMessage("START_APP", "*");
-        }, 800);
+        }, 500);
       }
     }
     application.register("gift-box", GiftBoxController);
@@ -117,23 +118,10 @@ if not st.session_state.started:
         height=450,
     )
 
-    # listen for iframe message
-    st.markdown(
-        """
-        <script>
-        window.addEventListener("message", (event) => {
-            if (event.data === "START_APP") {
-                fetch("/?start=true");
-            }
-        });
-        </script>
-        """,
-        unsafe_allow_html=True
-    )
-
-    if st.query_params.get("start"):
-        st.session_state.started = True
-        st.rerun()
+    st.markdown("<h3 style='text-align:center;'>⏳ Preparing your surprise...</h3>", unsafe_allow_html=True)
+    time.sleep(2)
+    st.session_state.started = True
+    st.experimental_rerun()
 
 # ================= MAIN PAGE =================
 if st.session_state.started:
@@ -156,4 +144,3 @@ if st.session_state.started:
         st.success("Ho Ho Ho! 🎅 Your answer has been safely sent to Santa 🎁")
 
     st.caption("❄️ Snow falling, Santa is watching...")
-
